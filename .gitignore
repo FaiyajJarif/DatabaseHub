@@ -416,3 +416,58 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# ------------------------------------------------------------
+# React / Node.js
+# ------------------------------------------------------------
+# Build outputs and caches
+build/
+dist/
+.cache/
+.parcel-cache/
+.vite/
+.next/
+out/
+coverage/
+.eslintcache
+.stylelintcache
+.sass-cache/
+*.tsbuildinfo
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Common temporary directories
+.tmp/
+
+# ------------------------------------------------------------
+# Environment files (keep example/template files tracked)
+# ------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# ------------------------------------------------------------
+# PostgreSQL dumps and local data directories
+# ------------------------------------------------------------
+pgdata/
+*.pgdump
+*.sql.gz
+*.dump
+*.backup
+
+# ------------------------------------------------------------
+# OS-specific noise (Windows)
+# ------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ------------------------------------------------------------
+# Optional: LibMan vendor libraries in ASP.NET Core
+# Uncomment if using LibMan to restore client libraries
+# ------------------------------------------------------------
+# wwwroot/lib/
