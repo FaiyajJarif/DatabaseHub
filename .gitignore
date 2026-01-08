@@ -471,3 +471,4 @@ Desktop.ini
 # Uncomment if using LibMan to restore client libraries
 # ------------------------------------------------------------
 # wwwroot/lib/
+*.mp4
