@@ -1,0 +1,68 @@
+@host = http://localhost:5145
+@api = {{host}}/api
+
+### Get All Universities
+GET {{api}}/universities?page=1&pageSize=10
+Accept: application/json
+
+###
+
+### Get University by ID
+GET {{api}}/universities/1
+Accept: application/json
+
+###
+
+### Get University Details
+GET {{api}}/universities/1/details
+Accept: application/json
+
+###
+
+### Get University Teachers
+GET {{api}}/universities/1/teachers
+Accept: application/json
+
+###
+
+### Get University Students
+GET {{api}}/universities/1/students
+Accept: application/json
+
+###
+
+### Create University (requires admin token)
+POST {{api}}/universities
+Content-Type: application/json
+
+{
+  "name": "Test University",
+  "code": "TU001",
+  "location": "Test City",
+  "description": "A test university",
+  "establishedYear": 2020,
+  "website": "https://test-university.edu"
+}
+
+###
+
+### Update University (requires admin token)
+PUT {{api}}/universities/1
+Content-Type: application/json
+
+{
+  "name": "Updated University Name",
+  "code": "UU001",
+  "location": "New Location",
+  "description": "Updated description",
+  "establishedYear": 2020,
+  "website": "https://updated-university.edu"
+}
+
+###
+
+### Delete University (requires admin token)
+DELETE {{api}}/universities/1
+Accept: application/json
+
+###

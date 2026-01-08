@@ -1,0 +1,180 @@
+using backend.DTOs;
+using backend.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using backend.Services.Interfaces;  
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using backend.Helpers;
+
+namespace backend.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UniversitiesController : ControllerBase
+    {
+        private readonly IUniversityService _universityService;
+
+        public UniversitiesController(IUniversityService universityService)
+        {
+            _universityService = universityService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUniversities(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _universityService.GetAllUniversities(page, pageSize);
+            
+            return Ok(new {
+                success = result.Success,
+                message = result.Message,
+                data = result.Data
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUniversity(int id)
+        {
+            var result = await _universityService.GetUniversityById(id);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> GetUniversityDetails(int id)
+        {
+            var result = await _universityService.GetUniversityDetails(id);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+
+        [HttpGet("{id}/courses")]
+        public async Task<IActionResult> GetUniversityCourses(int id,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _universityService.GetUniversityCourses(id, page, pageSize);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+
+        [HttpGet("{id}/teachers")]
+        public async Task<IActionResult> GetUniversityTeachers(int id,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _universityService.GetUniversityTeachers(id, page, pageSize);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+
+        [HttpGet("{id}/students")]
+        public async Task<IActionResult> GetUniversityStudents(int id,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var result = await _universityService.GetUniversityStudents(id, page, pageSize);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUniversity([FromBody] CreateUniversityDTO universityDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _universityService.CreateUniversity(universityDto);
+            
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return CreatedAtAction(nameof(GetUniversity), new { id = result.Data?.Id }, new {
+                success = true,
+                message = "University created successfully",
+                data = result.Data
+            });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUniversity(int id, [FromBody] UpdateUniversityDTO universityDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _universityService.UpdateUniversity(id, universityDto);
+            
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                message = "University updated successfully",
+                data = result.Data
+            });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUniversity(int id)
+        {
+            var result = await _universityService.DeleteUniversity(id);
+            
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                message = "University deleted successfully"
+            });
+        }
+
+        [HttpGet("{id}/stats")]
+        public async Task<IActionResult> GetUniversityStats(int id)
+        {
+            var result = await _universityService.GetUniversityStats(id);
+            
+            if (!result.Success)
+                return NotFound(new { success = false, message = result.Message });
+
+            return Ok(new {
+                success = true,
+                data = result.Data
+            });
+        }
+    }
+}
