@@ -62,6 +62,8 @@ export default function CourseLearningPage() {
 
     const [selectedLessonId, setSelectedLessonId] = useState(null);
 
+    const [completedLessons, setCompletedLessons] = useState([]);
+
     const { data, isLoading, error } = useQuery({
         queryKey: ["course-modules", courseId],
         queryFn: () => getCourseModules(courseId),
@@ -83,6 +85,16 @@ export default function CourseLearningPage() {
             </CoursesBackground>
         );
     }
+
+    const markLessonComplete = () => {
+        if (!selectedLessonId) return;
+
+        setCompletedLessons((prev) =>
+            prev.includes(selectedLessonId)
+                ? prev
+                : [...prev, selectedLessonId]
+        );
+    };
 
     return (
         <CoursesBackground>
@@ -137,13 +149,29 @@ export default function CourseLearningPage() {
                                                 px={2}
                                                 py={1}
                                                 borderRadius="md"
-                                                bg={selectedLessonId === l.id ? "blue.100" : "transparent"}
-                                                color={selectedLessonId === l.id ? "blue.700" : "gray.700"}
+                                                display="flex"
+                                                alignItems="center"
+                                                gap={2}
+                                                bg={
+                                                    selectedLessonId === l.id
+                                                        ? "blue.100"
+                                                        : completedLessons.includes(l.id)
+                                                            ? "green.50"
+                                                            : "transparent"
+                                                }
+                                                color={
+                                                    completedLessons.includes(l.id)
+                                                        ? "green.700"
+                                                        : selectedLessonId === l.id
+                                                            ? "blue.700"
+                                                            : "gray.700"
+                                                }
                                                 _hover={{ bg: "blue.50", color: "blue.600" }}
                                                 onClick={() => setSelectedLessonId(l.id)}
                                             >
-                                                • {l.title}
+                                                {completedLessons.includes(l.id) ? "✔" : "•"} {l.title}
                                             </Text>
+
                                         ))}
                                     </Stack>
 
@@ -180,11 +208,15 @@ export default function CourseLearningPage() {
 
                                     <Button
                                         colorScheme="blue"
+                                        onClick={markLessonComplete}
+                                        isDisabled={completedLessons.includes(selectedLessonId)}
                                         _hover={{ transform: "scale(1.05)" }}
                                         transition="0.2s"
                                         w="fit-content"
                                     >
-                                        Mark Lesson as Complete
+                                        {completedLessons.includes(selectedLessonId)
+                                            ? "Lesson Completed"
+                                            : "Mark Lesson as Complete"}
                                     </Button>
                                 </>
                             )}
